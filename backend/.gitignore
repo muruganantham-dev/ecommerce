@@ -10,8 +10,6 @@ node_modules/
 *.local
 
 # Uploads (user-generated files)
-uploads/*
-!uploads/.gitkeep
 
 # Logs
 logs/
