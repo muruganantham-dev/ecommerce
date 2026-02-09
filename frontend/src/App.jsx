@@ -9,6 +9,7 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
+import OrderFailure from './pages/OrderFailure';
 import OrderHistory from './pages/OrderHistory';
 import OrderDetail from './pages/OrderDetail';
 import Login from './pages/Login';
@@ -77,6 +78,7 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
         <Route path="order-success/:id" element={<PrivateRoute><OrderSuccess /></PrivateRoute>} />
+        <Route path="order-failure" element={<PrivateRoute><OrderFailure /></PrivateRoute>} />
         <Route path="orders" element={<PrivateRoute><OrderHistory /></PrivateRoute>} />
         <Route path="orders/:id" element={<PrivateRoute><OrderDetail /></PrivateRoute>} />
       </Route>

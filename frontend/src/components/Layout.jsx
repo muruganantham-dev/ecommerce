@@ -5,12 +5,12 @@ import Footer from './Footer';
 
 export default function Layout() {
   return (
-    <>
+    <div className="d-flex flex-column min-vh-100">
       <Header />
-      <main className="py-4 min-vh-100">
+      <main className="flex-grow-1 py-4">
         <Container><Outlet /></Container>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { Container, Navbar, Nav, Offcanvas, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/slices/authSlice';
+import { useToast } from '../../contexts/ToastContext';
 
 const navItems = [
   { to: '/admin', end: true, label: 'Dashboard' },
@@ -19,8 +20,10 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((s) => s.auth.user);
+  const { showToast } = useToast();
 
   const handleLogout = () => {
+    showToast('Logged out successfully', 'primary');
     dispatch(logout());
     navigate('/admin/login');
   };

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
+import LoadingButton from '../../components/LoadingButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, clearError } from '../../redux/slices/authSlice';
 
@@ -45,9 +46,9 @@ export default function AdminLogin() {
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
             </Form.Group>
-            <Button type="submit" variant="primary" className="w-100" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
-            </Button>
+            <LoadingButton type="submit" variant="primary" className="w-100" loading={loading} loadingText="Signing in...">
+              Login
+            </LoadingButton>
           </Form>
           <p className="mt-3 mb-0 text-center small">
             <a href="/">Back to Store</a>

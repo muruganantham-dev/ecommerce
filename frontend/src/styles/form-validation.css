@@ -1,0 +1,17 @@
+.form-control.is-invalid,
+.form-control:invalid,
+.was-validated .form-control:invalid {
+  border-color: #dc3545 !important;
+}
+
+.invalid-feedback,
+.form-validation-error {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.form-group-invalid .form-control {
+  border-color: #dc3545 !important;
+}

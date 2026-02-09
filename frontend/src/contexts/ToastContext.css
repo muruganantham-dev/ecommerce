@@ -1,0 +1,114 @@
+.toast-global-container {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+  pointer-events: none;
+}
+
+.toast-global-container > * {
+  pointer-events: auto;
+}
+
+.toast-item {
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  animation: toast-slide-in 0.35s ease;
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toast-item.toast-showing {
+  animation: toast-slide-in 0.35s ease;
+}
+
+.toast-item.toast-exiting {
+  animation: toast-slide-out 0.25s ease forwards;
+}
+
+@keyframes toast-slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.toast-item-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.toast-item-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.toast-item-body {
+  font-weight: 500;
+}
+
+.toast-item-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.toast-item-success .toast-item-header,
+.toast-item-success .toast-item-body {
+  color: #fff;
+}
+
+.toast-item-danger {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.toast-item-danger .toast-item-header,
+.toast-item-danger .toast-item-body {
+  color: #fff;
+}
+
+.toast-item-warning {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.toast-item-warning .toast-item-header,
+.toast-item-warning .toast-item-body {
+  color: #fff;
+}
+
+.toast-item-info {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.toast-item-info .toast-item-header,
+.toast-item-info .toast-item-body {
+  color: #fff;
+}
+
+.toast-item-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
+}
+
+.toast-item-primary .toast-item-header,
+.toast-item-primary .toast-item-body {
+  color: #fff;
+}
+
+.toast-item .btn-close {
+  filter: invert(1);
+}

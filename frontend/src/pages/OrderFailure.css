@@ -1,0 +1,104 @@
+.order-failure-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 40%, #fecaca 100%);
+  position: relative;
+}
+
+.order-failure-card {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 25px 60px rgba(220, 38, 38, 0.2), 0 0 0 1px rgba(220, 38, 38, 0.08);
+  text-align: center;
+  animation: orderFailureCardIn 0.5s ease;
+}
+
+@keyframes orderFailureCardIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.order-failure-icon-wrap {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 1.5rem;
+  color: #dc2626;
+  animation: orderFailureShake 0.6s ease 0.3s 2;
+}
+
+.order-failure-icon {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes orderFailureShake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-6px); }
+  30% { transform: translateX(6px); }
+  45% { transform: translateX(-4px); }
+  60% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+}
+
+.order-failure-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #991b1b;
+  margin-bottom: 0.75rem;
+}
+
+.order-failure-msg {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.order-failure-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.order-failure-btn {
+  padding: 0.65rem 1.25rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.25s ease;
+}
+
+.order-failure-btn-primary {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border: none;
+  color: #fff;
+}
+
+.order-failure-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
+  color: #fff;
+}
+
+@media (min-width: 576px) {
+  .order-failure-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .order-failure-title {
+    font-size: 2rem;
+  }
+}

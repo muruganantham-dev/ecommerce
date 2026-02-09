@@ -6,6 +6,7 @@ import { fetchProductById } from '../redux/slices/productSlice';
 import { addToCart } from '../redux/slices/cartSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProductPrice from '../components/ProductPrice';
+import AddToCartSuccessPopup from '../components/AddToCartSuccessPopup';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -15,6 +16,7 @@ export default function ProductDetail() {
   const loading = useSelector((s) => s.products.loading);
   const error = useSelector((s) => s.products.error);
   const [qty, setQty] = useState(1);
+  const [showCartPopup, setShowCartPopup] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProductById(id));
@@ -23,6 +25,11 @@ export default function ProductDetail() {
   const handleAddToCart = () => {
     if (!product) return;
     dispatch(addToCart({ product: product._id, name: product.name, price: product.price, image: product.image, quantity: qty }));
+    setShowCartPopup(true);
+  };
+
+  const handleCartPopupClose = () => {
+    setShowCartPopup(false);
     navigate('/cart');
   };
 
@@ -58,6 +65,7 @@ export default function ProductDetail() {
           </Card.Body>
         </div>
       </div>
+      <AddToCartSuccessPopup show={showCartPopup} onClose={handleCartPopupClose} />
     </Card>
   );
 }

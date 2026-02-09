@@ -139,6 +139,20 @@ body {
   border: 1px solid #e5e7eb;
 }
 
+.checkout-shipping-card {
+  border-color: #dee2e6 !important;
+}
+
+.checkout-shipping-card .form-control.is-invalid,
+.checkout-shipping-card .form-control:invalid {
+  border-color: #e5e7eb !important;
+}
+
+.order-summary-list .order-summary-price {
+  min-width: 4rem;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ========== Hero ========== */
 .hero-section {
   position: relative;

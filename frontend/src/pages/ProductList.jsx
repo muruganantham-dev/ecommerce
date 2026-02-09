@@ -6,12 +6,14 @@ import { fetchProducts, fetchCategories } from '../redux/slices/productSlice';
 import { addToCart } from '../redux/slices/cartSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProductPrice from '../components/ProductPrice';
+import AddToCartSuccessPopup from '../components/AddToCartSuccessPopup';
 
 export default function ProductList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get('search') || '');
   const [category, setCategory] = useState(searchParams.get('category') || '');
   const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
+  const [showCartPopup, setShowCartPopup] = useState(false);
   const dispatch = useDispatch();
   const { list, categories, loading, error, pages, total } = useSelector((s) => s.products);
 
@@ -101,7 +103,10 @@ export default function ProductList() {
                   <Button
                     size="sm"
                     className="btn-add-cart"
-                    onClick={() => dispatch(addToCart({ product: p._id, name: p.name, price: p.price, image: p.image }))}
+                    onClick={() => {
+                      dispatch(addToCart({ product: p._id, name: p.name, price: p.price, image: p.image }));
+                      setShowCartPopup(true);
+                    }}
                   >
                     Add to Cart
                   </Button>
@@ -120,6 +125,8 @@ export default function ProductList() {
           </Button>
         </div>
       )}
+
+      <AddToCartSuccessPopup show={showCartPopup} onClose={() => setShowCartPopup(false)} />
 
       {pages > 1 && (
         <div className="d-flex justify-content-center align-items-center gap-3 mt-5 flex-wrap">

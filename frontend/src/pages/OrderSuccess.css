@@ -1,0 +1,206 @@
+.order-success-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 30%, #a7f3d0 60%, #6ee7b7 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.order-success-loading {
+  font-size: 1.1rem;
+  color: #065f46;
+  font-weight: 500;
+}
+
+.order-success-confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background-image:
+    radial-gradient(circle at 10% 80%, rgba(16, 185, 129, 0.25) 0%, transparent 8px),
+    radial-gradient(circle at 90% 20%, rgba(5, 150, 105, 0.2) 0%, transparent 10px),
+    radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.15) 0%, transparent 15px);
+}
+
+.order-success-confetti-dot {
+  position: absolute;
+  left: var(--x, 20%);
+  top: var(--y, 20%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  opacity: 0.5;
+  animation: orderSuccessConfettiDot 3s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.25s);
+}
+
+.order-success-confetti-dot:nth-child(odd) {
+  background: #059669;
+  width: 8px;
+  height: 8px;
+}
+
+.order-success-confetti-dot:nth-child(3n) {
+  background: #34d399;
+  border-radius: 2px;
+}
+
+@keyframes orderSuccessConfettiDot {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(calc((var(--i) % 2 ? 1 : -1) * 15px), -15px) scale(1.2);
+    opacity: 0.9;
+  }
+}
+
+.order-success-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 25px 60px rgba(16, 185, 129, 0.25), 0 0 0 1px rgba(16, 185, 129, 0.1);
+  text-align: center;
+  animation: orderSuccessCardIn 0.5s ease;
+}
+
+@keyframes orderSuccessCardIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.order-success-icon-wrap {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 1.5rem;
+  color: #10b981;
+}
+
+.order-success-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.order-success-icon-circle {
+  stroke-dasharray: 150;
+  stroke-dashoffset: 150;
+  animation: orderSuccessCircleDraw 0.7s ease 0.2s forwards;
+}
+
+.order-success-icon-path {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: orderSuccessTickDraw 0.5s ease 0.7s forwards;
+}
+
+@keyframes orderSuccessCircleDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes orderSuccessTickDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+.order-success-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #065f46;
+  margin-bottom: 0.5rem;
+}
+
+.order-success-sub {
+  color: #047857;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.order-success-details {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.order-success-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.order-success-row:last-child {
+  border-bottom: none;
+}
+
+.order-success-label {
+  font-size: 0.9rem;
+  color: #047857;
+  font-weight: 500;
+}
+
+.order-success-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #065f46;
+}
+
+.order-success-note {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.order-success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.order-success-btn {
+  padding: 0.65rem 1.25rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.25s ease;
+}
+
+.order-success-btn-primary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  color: #fff;
+}
+
+.order-success-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  color: #fff;
+}
+
+@media (min-width: 576px) {
+  .order-success-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .order-success-title {
+    font-size: 2rem;
+  }
+}

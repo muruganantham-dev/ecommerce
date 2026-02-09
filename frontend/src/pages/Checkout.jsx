@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Card, Row, Col, Alert, ListGroup } from 'react-bootstrap';
+import LoadingButton from '../components/LoadingButton';
 import { useDispatch, useSelector } from 'react-redux';
 import api from '../services/api';
-import { openRazorpayCheckout } from '../services/razorpay';
+import { openRazorpayCheckout, hideRazorpayModal } from '../services/razorpay';
 import { createOrder, clearOrderError } from '../redux/slices/orderSlice';
 import { clearCart } from '../redux/slices/cartSlice';
 import { selectCartItems, selectCartTotal } from '../redux/slices/cartSlice';
@@ -15,6 +16,7 @@ export default function Checkout() {
   const cartTotal = useSelector(selectCartTotal);
   const user = useSelector((s) => s.auth.user);
   const { loading, error, currentOrder } = useSelector((s) => s.orders);
+  const [paymentRedirecting, setPaymentRedirecting] = useState(false);
   const [shipping, setShipping] = useState({
     name: user?.name || '',
     phone: user?.phone || '',
@@ -23,7 +25,6 @@ export default function Checkout() {
     state: '',
     pincode: '',
   });
-  const [payError, setPayError] = useState('');
 
   useEffect(() => {
     if (cartItems.length === 0 && !currentOrder) navigate('/cart');
@@ -31,7 +32,6 @@ export default function Checkout() {
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
-    setPayError('');
     dispatch(clearOrderError());
     const orderData = {
       orderItems: cartItems.map((i) => ({ product: i.product, quantity: i.quantity })),
@@ -42,7 +42,7 @@ export default function Checkout() {
     if (result.error || !order) return;
     const orderId = order?._id ?? order?.id;
     if (!orderId) {
-      setPayError('Order was created but could not start payment. Please try again from Orders.');
+      navigate('/order-failure', { state: { error: 'Order was created but could not start payment. Please try again from Orders.' } });
       return;
     }
     try {
@@ -52,24 +52,51 @@ export default function Checkout() {
         orderId: data.orderId,
         amount: data.amount,
         currency: data.currency,
+        onFailure: () => {
+          setPaymentRedirecting(true);
+          hideRazorpayModal();
+          api.post('/payments/notify-failure', { orderId: order._id, failureMessage: 'Payment failed or cancelled.' }).catch(() => {});
+          setTimeout(() => {
+            navigate('/order-failure', {
+              state: { error: 'Payment Failed. Please try again.' },
+            });
+          }, 3000);
+        },
       });
-      const verify = await api.post('/payments/verify', {
-        razorpay_order_id: payment.razorpay_order_id,
-        razorpay_payment_id: payment.razorpay_payment_id,
-        razorpay_signature: payment.razorpay_signature,
-      });
-      if (verify.data.success) {
-        dispatch(clearCart());
-        navigate(`/order-success/${order._id}`);
+      if (payment.success) {
+        const verify = await api.post('/payments/verify', {
+          razorpay_order_id: payment.razorpay_order_id,
+          razorpay_payment_id: payment.razorpay_payment_id,
+          razorpay_signature: payment.razorpay_signature,
+        });
+        if (verify.data.success) {
+          dispatch(clearCart());
+          navigate(`/order-success/${order._id}`);
+        } else {
+          setPaymentRedirecting(true);
+          hideRazorpayModal();
+          api.post('/payments/notify-failure', { orderId: order._id, failureMessage: 'Payment verification failed.' }).catch(() => {});
+          setTimeout(() => {
+            navigate('/order-failure', {
+              state: { error: 'Payment verification failed. Please try again.' },
+            });
+          }, 3000);
+        }
       }
     } catch (err) {
       const msg =
         err.response?.data?.message ||
         err.response?.data?.error ||
         (Array.isArray(err.response?.data?.errors) ? err.response.data.errors[0] : null) ||
-        err.message ||
-        'Payment failed. Try again or use a different payment method.';
-      setPayError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+        err.message;
+      setPaymentRedirecting(true);
+      hideRazorpayModal();
+      api.post('/payments/notify-failure', { orderId: order._id, failureMessage: msg || 'Payment failed.' }).catch(() => {});
+      setTimeout(() => {
+        navigate('/order-failure', {
+          state: { error: typeof msg === 'string' && msg ? msg : 'Payment Failed. Please try again.' },
+        });
+      }, 3000);
     }
   };
 
@@ -78,18 +105,21 @@ export default function Checkout() {
   return (
     <>
       <h2 className="mb-4">Checkout</h2>
-      {(error || payError) && (
-        <Alert variant="danger" onClose={() => { dispatch(clearOrderError()); setPayError(''); }} dismissible>
-          {error || payError}
-          {payError && (
-            <div className="small mt-2 opacity-75">Ensure order total is at least ₹1 and Razorpay keys are set in backend .env.</div>
-          )}
+      {paymentRedirecting && (
+        <Alert variant="warning" className="d-flex align-items-center gap-2">
+          <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+          Payment failed. Redirecting...
+        </Alert>
+      )}
+      {error && (
+        <Alert variant="danger" onClose={() => dispatch(clearOrderError())} dismissible>
+          {error}
         </Alert>
       )}
       <Form onSubmit={handlePlaceOrder}>
         <Row>
           <Col md={8}>
-            <Card className="mb-4">
+            <Card className="mb-4 checkout-shipping-card">
               <Card.Header>Shipping Address</Card.Header>
               <Card.Body>
                 <Form.Group className="mb-2">
@@ -115,21 +145,26 @@ export default function Checkout() {
           <Col md={4}>
             <Card>
               <Card.Header>Order Summary</Card.Header>
-              <ListGroup variant="flush">
+              <ListGroup variant="flush" className="order-summary-list">
                 {cartItems.map((i) => (
-                  <ListGroup.Item key={i.product}>{i.name} x{i.quantity} — ₹{i.price * i.quantity}</ListGroup.Item>
+                  <ListGroup.Item key={i.product} className="d-flex justify-content-between align-items-center">
+                    <span className="text-start">{i.name} x{i.quantity}</span>
+                    <span className="text-end order-summary-price">₹{i.price * i.quantity}</span>
+                  </ListGroup.Item>
                 ))}
-                <ListGroup.Item className="d-flex justify-content-between">
-                  <span>Subtotal</span><span>₹{cartTotal}</span>
+                <ListGroup.Item className="d-flex justify-content-between align-items-center">
+                  <span>Subtotal</span>
+                  <span className="text-end order-summary-price">₹{cartTotal}</span>
                 </ListGroup.Item>
-                <ListGroup.Item className="d-flex justify-content-between fw-bold">
-                  <span>Total</span><span>₹{cartTotal + (cartTotal > 500 ? 0 : 40) + Math.round(cartTotal * 0.05)}</span>
+                <ListGroup.Item className="d-flex justify-content-between align-items-center fw-bold">
+                  <span>Total</span>
+                  <span className="text-end order-summary-price">₹{cartTotal + (cartTotal > 500 ? 0 : 40) + Math.round(cartTotal * 0.05)}</span>
                 </ListGroup.Item>
               </ListGroup>
               <Card.Footer>
-                <Button type="submit" variant="primary" className="w-100" disabled={loading}>
-                  {loading ? 'Creating order...' : 'Place Order & Pay with Razorpay'}
-                </Button>
+                <LoadingButton type="submit" variant="primary" className="w-100 btn-no-animate" loading={loading} loadingText="Creating order...">
+                  Place Order
+                </LoadingButton>
               </Card.Footer>
             </Card>
           </Col>

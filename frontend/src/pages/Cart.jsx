@@ -60,7 +60,7 @@ export default function Cart() {
           <Card>
             <Card.Body>
               <h5>Total: ₹{total}</h5>
-              <Button as={Link} to="/checkout" variant="primary" className="w-100">Proceed to Checkout</Button>
+              <Button as={Link} to="/checkout" variant="primary" className="w-100 btn-no-animate">Proceed to Checkout</Button>
             </Card.Body>
           </Card>
         </Col>

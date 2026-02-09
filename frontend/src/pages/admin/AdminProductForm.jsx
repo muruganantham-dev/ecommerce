@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Card, Alert, Row, Col } from 'react-bootstrap';
+import LoadingButton from '../../components/LoadingButton';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchProduct,
@@ -154,7 +155,7 @@ export default function AdminProductForm() {
             <Form.Group className="mb-3">
               <Form.Check type="switch" name="isActive" label="Active" checked={form.isActive === 'true'} onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.checked ? 'true' : 'false' }))} />
             </Form.Group>
-            <Button type="submit" variant="primary" disabled={loading}>{loading ? 'Saving...' : 'Save'}</Button>
+            <LoadingButton type="submit" variant="primary" loading={loading} loadingText="Saving...">Save</LoadingButton>
             <Button type="button" variant="secondary" className="ms-2" onClick={() => navigate('/admin/products')}>Cancel</Button>
           </Form>
         </Card.Body>

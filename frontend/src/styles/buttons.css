@@ -1,0 +1,242 @@
+/* ========== Button Animation Variables ========== */
+:root {
+  --btn-transition: 0.3s ease;
+  --btn-scale-hover: 1.04;
+  --btn-scale-active: 0.97;
+  --btn-shadow-default: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --btn-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.18);
+  --btn-shadow-glow-primary: 0 0 24px rgba(79, 70, 229, 0.55);
+  --btn-shadow-glow-success: 0 0 24px rgba(16, 185, 129, 0.55);
+  --btn-shadow-glow-danger: 0 0 24px rgba(220, 38, 38, 0.55);
+  --btn-radius: 9999px;
+}
+
+/* ========== Global Button Base - Premium Style ========== */
+.btn:not(.btn-close) {
+  border-radius: var(--btn-radius) !important;
+  font-weight: 600;
+  transition: transform var(--btn-transition), box-shadow var(--btn-transition),
+    filter var(--btn-transition), background var(--btn-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ========== Premium Gradient Backgrounds ========== */
+.btn-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(107, 114, 128, 0.35);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border: none !important;
+  color: #1f2937 !important;
+}
+
+.btn:not(.btn-close):not(.btn-link):hover {
+  transform: scale(var(--btn-scale-hover)) translateY(-2px);
+  box-shadow: var(--btn-shadow-hover);
+}
+
+.btn:not(.btn-close):not(.btn-link):active {
+  transform: scale(var(--btn-scale-active)) translateY(1px);
+  animation: btn-bounce 0.4s ease;
+}
+
+.btn-link:hover {
+  transform: scale(1.02);
+}
+
+@keyframes btn-bounce {
+  0%, 100% { transform: scale(var(--btn-scale-active)) translateY(1px); }
+  50% { transform: scale(0.98) translateY(2px); }
+}
+
+/* ========== Ripple Effect (CSS) ========== */
+.btn:not(.btn-close)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.35) 0%, transparent 65%);
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.btn:not(.btn-close):active::after {
+  animation: btn-ripple-expand 0.5s ease-out;
+  opacity: 1;
+}
+
+@keyframes btn-ripple-expand {
+  to {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* ========== Variant-specific Glow on Hover ========== */
+.btn-primary:hover,
+.btn.btn-primary:hover {
+  box-shadow: var(--btn-shadow-hover), var(--btn-shadow-glow-primary) !important;
+  filter: brightness(1.05);
+}
+
+.btn-success:hover,
+.btn.btn-success:hover {
+  box-shadow: var(--btn-shadow-hover), var(--btn-shadow-glow-success) !important;
+  filter: brightness(1.05);
+}
+
+.btn-danger:hover,
+.btn.btn-danger:hover {
+  box-shadow: var(--btn-shadow-hover), var(--btn-shadow-glow-danger) !important;
+  filter: brightness(1.05);
+}
+
+/* ========== Outline Buttons Hover Gradient ========== */
+.btn-outline-primary:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border-color: transparent;
+  color: #fff !important;
+}
+
+.btn-outline-success:hover {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-color: transparent;
+  color: #fff !important;
+}
+
+.btn-outline-danger:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border-color: transparent;
+  color: #fff !important;
+}
+
+.btn-outline-secondary:hover {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  border-color: transparent;
+  color: #fff !important;
+}
+
+.btn-outline-warning:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: transparent;
+  color: #1f2937 !important;
+}
+
+/* ========== Loading Button ========== */
+.btn:disabled:not(.btn-close) {
+  cursor: not-allowed;
+}
+
+/* ========== Icon Button ========== */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn-icon .btn-icon-svg,
+.btn-icon svg {
+  transition: transform var(--btn-transition), color var(--btn-transition);
+}
+
+.btn-icon:hover .btn-icon-svg,
+.btn-icon:hover svg {
+  transform: translateX(4px);
+}
+
+.btn-icon.btn-icon-right .btn-icon-svg,
+.btn-icon.btn-icon-right svg {
+  order: 1;
+}
+
+.btn-icon.btn-icon-right:hover .btn-icon-svg,
+.btn-icon.btn-icon-right:hover svg {
+  transform: translateX(-4px);
+}
+
+/* ========== Gradient Button Enhancements ========== */
+.btn-gradient-primary,
+.btn-gradient-cta,
+.card-product .btn-add-cart {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gradient-primary:hover,
+.btn-gradient-cta:hover {
+  transform: scale(var(--btn-scale-hover)) translateY(-2px) !important;
+}
+
+.btn-gradient-primary:active,
+.btn-gradient-cta:active {
+  transform: scale(var(--btn-scale-active)) translateY(1px) !important;
+}
+
+.card-product .btn-add-cart:hover {
+  transform: scale(1.05) !important;
+}
+
+.card-product .btn-add-cart:active {
+  transform: scale(0.98) !important;
+}
+
+/* ========== Disabled State Animation ========== */
+.btn:disabled,
+.btn.disabled {
+  animation: btn-disabled-pulse 2s ease-in-out infinite;
+}
+
+@keyframes btn-disabled-pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+/* ========== Rounded Pill Buttons ========== */
+.btn.rounded-pill {
+  border-radius: 9999px !important;
+}
+
+/* ========== No Animation ========== */
+.btn-no-animate:hover,
+.btn-no-animate:active {
+  transform: none !important;
+  animation: none !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4) !important;
+}
+
+.btn-no-animate::after {
+  display: none !important;
+}
+
+.btn-no-animate:disabled {
+  animation: none !important;
+}
+
+/* ========== Exclude Modal Close ========== */
+.btn-close {
+  border-radius: 0.375rem;
+}

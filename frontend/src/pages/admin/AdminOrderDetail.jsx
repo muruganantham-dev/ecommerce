@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, ListGroup, Button, Form, Badge } from 'react-bootstrap';
+import LoadingButton from '../../components/LoadingButton';
 import api from '../../services/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateOrderStatus } from '../../redux/slices/adminSlice';
@@ -74,9 +75,9 @@ export default function AdminOrderDetail() {
                     <option key={s} value={s}>{s}</option>
                   ))}
                 </Form.Select>
-                <Button type="submit" size="sm" disabled={updating || status === order.status}>
-                  {updating ? 'Updating...' : 'Update (sends WhatsApp)'}
-                </Button>
+                <LoadingButton type="submit" size="sm" loading={updating} loadingText="Updating..." disabled={status === order.status}>
+                  Update (sends WhatsApp)
+                </LoadingButton>
               </Form>
             </Card.Body>
           </Card>

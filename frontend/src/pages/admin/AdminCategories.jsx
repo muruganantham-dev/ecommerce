@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Table, Button, Badge, Modal, Form } from 'react-bootstrap';
+import LoadingButton from '../../components/LoadingButton';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchCategories,
@@ -168,7 +169,7 @@ export default function AdminCategories() {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
-            <Button variant="primary" type="submit" disabled={loading}>{loading ? 'Saving...' : 'Save'}</Button>
+            <LoadingButton variant="primary" type="submit" loading={loading} loadingText="Saving...">Save</LoadingButton>
           </Modal.Footer>
         </Form>
       </Modal>
@@ -178,7 +179,7 @@ export default function AdminCategories() {
         <Modal.Body>Remove this category? Products using it will keep the category name but it will no longer appear in the category list.</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setDeleteId(null)}>Cancel</Button>
-          <Button variant="danger" onClick={handleDelete} disabled={loading}>Delete</Button>
+          <LoadingButton variant="danger" onClick={handleDelete} loading={loading} loadingText="Deleting...">Delete</LoadingButton>
         </Modal.Footer>
       </Modal>
     </>

@@ -3,6 +3,7 @@ import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { Navbar, Nav, Container, Badge } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
+import { useToast } from '../contexts/ToastContext';
 import { selectCartCount } from '../redux/slices/cartSlice';
 
 export default function Header() {
@@ -10,6 +11,7 @@ export default function Header() {
   const dispatch = useDispatch();
   const { user, token } = useSelector((s) => s.auth);
   const cartCount = useSelector(selectCartCount);
+  const { showToast } = useToast();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -19,6 +21,7 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
+    showToast('Logged out successfully', 'primary');
     dispatch(logout());
     navigate('/');
   };

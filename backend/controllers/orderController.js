@@ -1,5 +1,6 @@
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
+import { validationResult } from 'express-validator';
 import { sendOrderSuccessWhatsApp, sendOrderCancelledWhatsApp } from '../services/whatsappService.js';
 
 /**
@@ -8,10 +9,12 @@ import { sendOrderSuccessWhatsApp, sendOrderCancelledWhatsApp } from '../service
  */
 export const createOrder = async (req, res, next) => {
   try {
-    const { orderItems, shippingAddress } = req.body;
-    if (!orderItems?.length || !shippingAddress) {
-      return res.status(400).json({ success: false, message: 'Order items and shipping address required.' });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const msg = errors.array().map((e) => e.msg).join('. ');
+      return res.status(400).json({ success: false, message: msg, errors: errors.array() });
     }
+    const { orderItems, shippingAddress } = req.body;
     let itemsPrice = 0;
     const orderItemsWithDetails = [];
     for (const item of orderItems) {

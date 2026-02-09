@@ -99,6 +99,8 @@ Create order (from cart).
 }
 ```
 
+**Validation:** orderItems (array, min 1), orderItems.*.product (MongoId), orderItems.*.quantity (1–99), shippingAddress.name, phone, street, city, pincode (required).
+
 **Response:** `{ success, order }`
 
 ---
@@ -133,7 +135,7 @@ Cancel order (only if not paid).
 
 Create Razorpay order for given order ID.
 
-**Body:** `{ orderId: "<orderId>" }`
+**Body:** `{ orderId: "<orderId>" }` (orderId must be valid MongoDB ObjectId)
 
 **Response:** `{ success, orderId (Razorpay), amount (paise), currency, keyId }`
 
@@ -143,9 +145,24 @@ Create Razorpay order for given order ID.
 
 Verify payment after Razorpay checkout.
 
-**Body:** `{ razorpay_order_id, razorpay_payment_id, razorpay_signature }`
+**Body:** `{ razorpay_order_id, razorpay_payment_id, razorpay_signature }` (all required)
 
 **Response:** `{ success, order }` — order is updated (isPaid, paymentResult) and WhatsApp sent if configured.
+
+---
+
+### POST /payments/notify-failure
+
+Notify payment failure and trigger WhatsApp order failure template.
+
+**Body (JSON):**
+
+| Field          | Type   | Required | Description                    |
+|----------------|--------|----------|--------------------------------|
+| orderId        | string | Yes      | MongoDB order ID               |
+| failureMessage | string | No       | Custom failure message (optional) |
+
+**Response:** `{ success, whatsapp: "sent" | "failed" | "skipped" | "error", error? }`
 
 ---
 
